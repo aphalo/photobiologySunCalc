@@ -55,7 +55,7 @@ the inclusion of astronomical calculations about the sun in this package. On
 the other hand, such calculations are also highly relevant to other fields
 including solar energy.
 
-The functions and methods described in this volume return either values that
+The functions and methods described in this User Guide return either values that
 represent angles or times. In the current version angles are always expressed in
 degrees. In the case of times, the unit of expression, can be changed through
 parameter `unit.out` which accepts the following arguments `"datetime"`,
@@ -105,7 +105,7 @@ OSM is open). We use the "geocode" for Helsinki, defined explicitly rather
 than searched for.
 
 ```{r}
-my.geocode <- data.frame(lat = 60.16, lon = 24.93, address = "Helsinki")
+Helsinki.geo <- data.frame(lat = 60.16, lon = 24.93, address = "Helsinki")
 ```
 
 Be aware that to obtain correct computed values the time zone must be correctly set for the
@@ -121,7 +121,7 @@ time zone `"Europe/Helsinki"`, which matches _Eastern European Time_.
 
 ```{r}
 sun_angles(time = ymd_hms("2017-06-20 08:00:00", tz = "Europe/Helsinki"), 
-           geocode = my.geocode)
+           geocode = Helsinki.geo)
 ```
 
 Functions have defaults for their arguments, Greenwhich in U.K. and the
@@ -140,12 +140,12 @@ or stored beforehand.
 
 ```{r}
 sun_angles(time = ymd_hms("2014-01-01 0:0:0", tz = "Europe/Helsinki") + hours(c(0, 6, 12)), 
-           geocode = my.geocode)
+           geocode = Helsinki.geo)
 ```
 
 ```{r}
 my.times <- ymd_hms("2014-01-01 0:0:0", tz = "Europe/Helsinki") + hours(c(0, 6, 12))
-sun_angles(time = my.times, geocode = my.geocode)
+sun_angles(time = my.times, geocode = Helsinki.geo)
 ```
 
 Geocodes for several locations can be stored in a data frame with multiple rows.
@@ -165,15 +165,15 @@ with function `sun_angles()` and later extract the vectors from the returned
 data frame.
 
 ```{r}
-sun_elevation(time = my.times, geocode = my.geocode)
+sun_elevation(time = my.times, geocode = Helsinki.geo)
 ```
 
 ```{r}
-sun_zenith_angle(time = my.times, geocode = my.geocode)
+sun_zenith_angle(time = my.times, geocode = Helsinki.geo)
 ```
 
 ```{r}
-sun_azimuth(time = my.times, geocode = my.geocode)
+sun_azimuth(time = my.times, geocode = Helsinki.geo)
 ```
 
 ## Times of sunrise, solar noon and sunset
@@ -215,11 +215,11 @@ At least in R (< 4.5.0) the "EET", "CET", etc. are still used when printing or f
 ```{r}
 # defaults to current UTC date and Greenwich, UK as location
 sunrise_time()
-sunrise_time(date = now(), tz = "Europe/Helsinki", geocode = my.geocode)
-sunrise_time(date = now(tzone = "Europe/Helsinki"), geocode = my.geocode)
+sunrise_time(date = now(), tz = "Europe/Helsinki", geocode = Helsinki.geo)
+sunrise_time(date = now(tzone = "Europe/Helsinki"), geocode = Helsinki.geo)
 # time zone abbreviation not shown
 print(sunrise_time(date = now("Europe/Helsinki"), 
-                   geocode = my.geocode),
+                   geocode = Helsinki.geo),
       usetz = FALSE)
 ```
 
@@ -231,16 +231,16 @@ The time zone used by default for the returned value is that of the `POSIXct` va
 
 ```{r}
 ## Using date times as POSIXct
-sunrise_time(geocode = my.geocode)
-sunrise_time(date = now("UTC"), geocode = my.geocode)
-sunrise_time(date = now("UTC"), tz = "UTC", geocode = my.geocode)
-sunrise_time(date = now("Europe/Helsinki"), geocode = my.geocode)
-sunrise_time(date = now(""), tz = "Europe/Helsinki", geocode = my.geocode)
+sunrise_time(geocode = Helsinki.geo)
+sunrise_time(date = now("UTC"), geocode = Helsinki.geo)
+sunrise_time(date = now("UTC"), tz = "UTC", geocode = Helsinki.geo)
+sunrise_time(date = now("Europe/Helsinki"), geocode = Helsinki.geo)
+sunrise_time(date = now(""), tz = "Europe/Helsinki", geocode = Helsinki.geo)
 ## Using Date
 # correct always as time zones match
-sunrise_time(today("Europe/Helsinki"), tz = "Europe/Helsinki", geocode = my.geocode)
+sunrise_time(today("Europe/Helsinki"), tz = "Europe/Helsinki", geocode = Helsinki.geo)
 # sometimes the value returned will be correct and sometimes off by 1 d at Helsinki
-sunrise_time(today("Australia/Canberra"), tz = "Europe/Helsinki", geocode = my.geocode)
+sunrise_time(today("Australia/Canberra"), tz = "Europe/Helsinki", geocode = Helsinki.geo)
 ```
 
 ----
@@ -248,24 +248,24 @@ sunrise_time(today("Australia/Canberra"), tz = "Europe/Helsinki", geocode = my.g
 We can also compute the time at solar noon and at sunset.
 
 ```{r}
-noon_time(now("UTC"), geocode = my.geocode)
-noon_time(now("Europe/Helsinki"), geocode = my.geocode)
+noon_time(now("UTC"), geocode = Helsinki.geo)
+noon_time(now("Europe/Helsinki"), geocode = Helsinki.geo)
 ```
 
 By default, sunset and sunrise are defined as the time when the upper rim of the solar disk is at the horizon. How to override this default to account for twilight and or obstacles that occlude the sun will be shown later.
 
 ```{r}
-sunset_time(now("UTC"), geocode = my.geocode)
-sunset_time(now("Europe/Helsinki"), geocode = my.geocode)
-sunrise_time(now("Europe/Helsinki"), geocode = my.geocode)
+sunset_time(now("UTC"), geocode = Helsinki.geo)
+sunset_time(now("Europe/Helsinki"), geocode = Helsinki.geo)
+sunrise_time(now("Europe/Helsinki"), geocode = Helsinki.geo)
 ```
 
 Functions `day_length()` and `night_length()` return the length of time between sunrise and sunset and between sunset and sunrise, respectively, by default expressed in hours and fraction.
 
 ```{r}
-day_length(dates, geocode = my.geocode)
-night_length(dates, geocode = my.geocode)
-day_length(dates, geocode = my.geocode, unit.out = "day")
+day_length(dates, geocode = Helsinki.geo)
+night_length(dates, geocode = Helsinki.geo)
+day_length(dates, geocode = Helsinki.geo, unit.out = "day")
 ```
 
 Southern hemisphere latitudes as well as longitudes to the West of the Greenwich
@@ -284,56 +284,72 @@ of a standard definition, or as an angle in degrees (negative for sun positions
 below the horizon). Positive angles can be used when the time of sun occlusion
 behind a building, mountain, or other obstacle needs to be calculated. The
 default for `twilight` is `"none"` meaning that times correspond to the
-occlusion of the upper rim of the sun disk below the theoretical horizon.
+instant when the center of the solar disk is at the theoretical (= astronomical) horizon.
 
 ```{r}
+# not refraction corrected
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
+             geocode = Helsinki.geo,
              twilight = "none") # center of the sun disk
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
-             twilight = "sunlight") # upper rim of the sun disk
+             geocode = Helsinki.geo,
+             twilight = "upper.rim") # upper rim of the sun disk
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
-             twilight = "rim") # lower rim of the sun disk
+             geocode = Helsinki.geo,
+             twilight = "lower.rim") # lower rim of the sun disk
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
+             geocode = Helsinki.geo,
              twilight = "civil") # civil twilight = -6 degrees
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
+             geocode = Helsinki.geo,
              twilight = -10) # 10 degrees below the horizon
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
+             geocode = Helsinki.geo,
              twilight = +12) # 12 degrees above the horizon
 ```
 
+Two names match twilight angles that are approximately corrected for atmospheric refraction, based on assumed atmosphere composition including water vapour column. Refraction alters the path of the direct sunlight beam, making the times of apparent (= visual) sunset slightly different from the astronomical (= real) position of the sun.
+
+```{r}
+# refraction corrected
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = Helsinki.geo,
+             twilight = "refraction") # center of the sun disk
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = Helsinki.geo,
+             twilight = "sunlight") # upper rim of the sun disk
+```
+
+Twilight is also relevant to the computation of day length and night length. The default is to use the centre of the sun disk, but this can be changed. For the 
 Twilight is also relevant to the computation of day length and night length. The default is to use the centre of the sun disk, but this can be changed. For the values returned by `day_length()` and `night_length()` to add to 24 h they must be computed using the same twilight definition.
 
 ```{r}
 day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode)
+             geocode = Helsinki.geo)
 day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
+             geocode = Helsinki.geo,
              twilight = 0)
 day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
-             twilight = "rim")
+             geocode = Helsinki.geo,
+             twilight = "upper.rim")
 day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
+             geocode = Helsinki.geo,
              twilight = "civil")
 day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
+             geocode = Helsinki.geo,
              twilight = -10)
 ```
 
@@ -341,11 +357,11 @@ Say if there is a mountain blocking the view above the Western horizon, we can s
 ```{r}
 day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
            tz = "Europe/Helsinki", 
-           geocode = my.geocode,
+           geocode = Helsinki.geo,
            twilight = c(0, 12))
 night_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
+             geocode = Helsinki.geo,
              twilight = c(0, 12))
 ```
 
@@ -356,18 +372,18 @@ time-of-day in hours, minutes, or seconds since midnight, instead of the default
 ```{r}
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode)
+             geocode = Helsinki.geo)
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
-             geocode = my.geocode,
+             geocode = Helsinki.geo,
              unit.out = "hours")
 ```
 
 Similarly, the units can also be selected for the values returned by `day_length()` and `night_length()`.
 
 ```{r}
-day_length(dates, geocode = my.geocode, unit.out = "days")
-night_length(dates, geocode = my.geocode, unit.out = "days")
+day_length(dates, geocode = Helsinki.geo, unit.out = "days")
+night_length(dates, geocode = Helsinki.geo, unit.out = "days")
 ```
 
 ----
@@ -379,7 +395,7 @@ data frame and later select the columns of interest.
 
 ```{r}
 day_night(dates[1:3], 
-          geocode = my.geocode)
+          geocode = Helsinki.geo)
 ```
 
 The default for `unit.out` is `"hours"` with decimal fractions, as seen above.
@@ -388,7 +404,7 @@ useful.
 
 ```{r}
 day_night(dates[1:3], 
-          geocode = my.geocode, 
+          geocode = Helsinki.geo, 
           unit.out = "days")
 ```
 
@@ -398,7 +414,7 @@ fractional hours.
 
 ```{r}
 day_night(dates[1:3], 
-          geocode = my.geocode, 
+          geocode = Helsinki.geo, 
           unit.out = "datetime")
 ```
 
@@ -495,8 +511,32 @@ Two additional functions make it possible to compute the relative AM from time a
 
 ```{r}
 january.times <- ymd_h("2020-01-01 12", tz = "Europe/Helsinki") + hours(-2:+2)
-relative_AM_geotime(january.times, my.geocode, tz = "Europe/Helsinki")
+relative_AM_geotime(january.times, Helsinki.geo, tz = "Europe/Helsinki")
 ```
+
 ```{r}
-relative_AMt_geotime(january.times, my.geocode, tz = "Europe/Helsinki")
+relative_AMt_geotime(january.times, Helsinki.geo, tz = "Europe/Helsinki")
 ```
+
+## Irradiance
+
+Although the normal global short-wave irradiance at the top of the atmosphere
+varies so little as to allow it to be described as the _solar constant_, the
+value of the extraterrestrial irradiance on a plane parallel to the ground
+depends strongly on the position of the sun and weakly on changes in the Sun to
+Earth distance. This is a simple trigonometric computation as direct radiation
+is the overwhelming component of sunlight above the atmosphere, when light
+reflected by the Moon and planets is ignored as done here.
+
+```{r}
+
+```
+
+```{r}
+irrad_extraterrestrial(
+  ymd_hms("2026-06-21 13:00:00", 
+          tz = "Europe/Helsinki") + hours(0:10),
+  geocode = Helsinki.geo)
+```
+
+

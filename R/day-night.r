@@ -12,10 +12,10 @@
 #'   interpret \code{Date} values passed as argument to \code{date}.
 #' @param geocode data frame with one or more rows and variables lon and lat as
 #'   numeric values (degrees). If present, address will be copied to the output.
-#' @param twilight character string, one of "none", "rim", "refraction",
-#'   "sunlight", "civil", "nautical", "astronomical", or a \code{numeric} vector
-#'   of length one, or two, giving solar elevation angle(s) in degrees (negative
-#'   if below the horizon).
+#' @param twilight character string, one of "none", "upper.rim", "lower.rim",
+#'   "refraction", "sunlight", "civil", "nautical", "astronomical", or a
+#'   \code{numeric} vector of length one, or two, giving solar elevation
+#'   angle(s) in degrees (negative if below the horizon).
 #' @param unit.out character string, One of "datetime", "day", "hour", "minute",
 #'   or "second".
 #'
@@ -26,8 +26,9 @@
 #' @family astronomy related functions
 #'
 #' @details Twilight names are interpreted as follows. "none": solar elevation =
-#'   0 degrees. "rim": upper rim of solar disk at the horizon or solar elevation
-#'   = -0.53 / 2. "refraction": solar elevation = 0 degrees + refraction
+#'   0 degrees. "upper.rim" (or "rim"): upper rim of solar disk at the horizon or solar elevation
+#'   = -0.53 / 2. "lower.rim" (or "rim"): lower rim of solar disk at the horizon or solar elevation
+#'   = 0.53 / 2. "refraction": solar elevation = 0 degrees + refraction
 #'   correction. "sunlight": upper rim of solar disk corrected for refraction,
 #'   which is close to the value used by the online NOAA Solar Calculator.
 #'   "civil": -6 degrees, "nautical": -12 degrees, and "astronomical": -18 degrees.
@@ -56,7 +57,7 @@
 #'   largest timing errors occur at high latitudes. The computation is not
 #'   defined for latitudes 90 and -90 degrees, i.e. at the poles.
 #'
-#'   There exists a different R implementation of the same algorithms called
+#'   There exists a different R implementation of the same algorithm called
 #'   "AstroCalcPureR" available as function \code{astrocalc4r} in package
 #'   'fishmethods'. Although the equations used are almost all the same, the
 #'   function signatures and which values are returned differ. In particular,

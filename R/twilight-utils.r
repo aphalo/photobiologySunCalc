@@ -20,8 +20,10 @@ twilight2angle <- function(twilight) {
       switch(twilight,
              none = c(0, 0), # center of solar disk
              rim = c(-0.53/2, -0.53/2), # upper rim of solar disk
-             refraction = c(-0.4819444, -0.4819444), # center of solar disk, refraction corrected
-             sunlight = c(-0.833, -0.833),
+             upper.rim =  c(-0.53/2, -0.53/2),
+             lower.rim =  c(0.53/2, 0.53/2),
+             refraction = c(-0.4819444, -0.4819444), # center, refraction corrected
+             sunlight = c(-0.833, -0.833), # upper rim, refraction correcter
              civil = c(-6, -6),
              nautical = c(-12, -12),
              astronomical = c(-18, -18),

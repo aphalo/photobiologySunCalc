@@ -4,6 +4,12 @@ editor_options:
     wrap: 72
 ---
 
+# SunCalcMeeus 0.1.4
+
+- Add as recognized `twilight` argumnets `"upper.rim"` and `"lower.rim`"`. 
+- Fix wording in User Guide and the description of `twilight` default argument
+value `"none"` in help page.
+
 # SunCalcMeeus 0.1.3
 
 - Fix to docs (contributed as #1 by srearl).

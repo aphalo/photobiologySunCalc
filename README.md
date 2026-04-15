@@ -99,7 +99,7 @@ geocode <- data.frame(lon = 0, lat = 55)
 date <- lubridate::today(tzone = "UTC")
 
 sunrise_time(date, geocode = geocode)
-#> [1] "2025-01-08 08:21:29 UTC"
+#> [1] "2026-04-15 04:56:20 UTC"
 
 dates <- ymd("2024-09-21") + months(0:11)
 sunrise_time(dates, geocode = geocode)
